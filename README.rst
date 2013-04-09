@@ -90,6 +90,7 @@ intended on serving a particular purpose.
 .. _Cytoscape Plugins: https://github.com/OpenBEL/Cytoscape-Plugins#readme
 .. _OpenBEL Eclipse Repository: https://github.com/OpenBEL/eclipse
 .. _BEL Editor: https://github.com/OpenBEL/bel-editor
+.. _REST API: https://github.com/OpenBEL/rest-api
 .. _Cytoscape: http://www.cytoscape.org/
 .. _Eclipse: http://eclipse.org
 .. _freenode IRC network: http://www.freenode.net/
