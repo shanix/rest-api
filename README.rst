@@ -1,7 +1,6 @@
 BEL Framework REST API
 ======================
 
-
 **For a more complete guide to using the BEL Framework, we encourage you to
 check out the** `OpenBEL Wiki`_.
 
