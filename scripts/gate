@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+'''
+Copyright (c) 2011 Nick Bargnesi <nick@den-4.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+@author: Nick Bargnesi
+'''
+
+import sys
+
+def usage():
+    '''
+    Prints usage information to stdout.
+    '''
+    print('Usage:', ME, '<DIR>...')
+    print("Try '" + ME, " --help' for more information.")
+    
+def help():
+    '''
+    Prints usage and help information to stdout.
+    '''
+    print('Usage:', ME, '<DIR>...')
+    print('Waits until a file is written in any of the directories provided')
+    print('as arguments. This program will exit with a return code of 0 unless')
+    print('it is interrupted.')
+    print()
+    print('If no directories are provided, all directories under the current')
+    print('working directory will be used.')
+    print()
+    print('Example:', ME, '$HOME')
+    print()
+    print('Miscellaneous:')
+    print('  -h, --help\t\tdisplay this help and exit')
+    print()
+    print('gate home page: <http://nick.den-4.com>')
+    
+def exit_success(event):
+    '''
+    Exits with status 0.
+    '''
+    print(event.pathname)
+    NOTIFIER.stop()
+    sys.exit(0)
+    
+def exit_failure():
+    '''
+    Exits with status 1.
+    '''
+    sys.exit(1)
+    
+from os.path import isdir
+from os import getcwd
+try:
+    from pyinotify import ProcessEvent, WatchManager, Notifier
+    from pyinotify import IN_MODIFY
+except ImportError as strerror:
+    print("You're missing pyinotify (%s)." % strerror)
+    print("Get it here: http://pyinotify.sourceforge.net")
+    exit_failure()
+
+class DummyProcessor(ProcessEvent):
+    '''
+    Handles filesystem events.
+    '''
+    def __init__(self):
+        ProcessEvent.__init__(self)
+
+    def process_IN_MODIFY(self, event):
+        '''
+        Handles IN_MODIFY(self, event):
+        '''
+        exit_success(event)
+
+if __name__ == '__main__':
+    ME = sys.argv[0]
+    
+    for arg in sys.argv[1:]:
+        if arg == '--help' or arg == '-h':
+            help()
+            exit_failure()        
+
+    DIRS = list()
+    if len(sys.argv) > 1:
+        DIRS = sys.argv[1:]
+        SUCCESS = True
+        for d in DIRS:
+            if not isdir(d):
+                print('%s: not a directory' % d)
+                SUCCESS = False
+        if not SUCCESS:
+            exit_failure()
+         
+    WM = WatchManager()
+    NOTIFIER = Notifier(WM, DummyProcessor())
+    WDDS = list()
+    if not DIRS:
+        DIRS.append(getcwd())
+    for d in DIRS:
+        WDDS += WM.add_watch(d, IN_MODIFY)
+
+    while True:
+        try:
+            NOTIFIER.process_events()
+            if NOTIFIER.check_events():
+                NOTIFIER.read_events()
+        except KeyboardInterrupt:
+            NOTIFIER.stop()
+            exit_failure()
+    exit_failure()
+
