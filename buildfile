@@ -39,10 +39,10 @@ repositories.remote << 'http://repo1.maven.org/maven2'
 restlet_grp = 'org.restlet.jse'
 restlet = restlet_grp + ':org.restlet:jar:2.1.2'
 jackson = restlet_grp + ':org.restlet.ext.jackson:jar:2.1.2'
-json = restlet_grp + ':org.restlet.ext.json:jar:2.1.2'
-lucene = restlet_grp + ':org.restlet.ext.lucene:jar:2.1.2'
+json_ext = restlet_grp + ':org.restlet.ext.json:jar:2.1.2'
 restlet_test = restlet_grp + ':org.restlet.test:jar:2.1.2'
-RESTLET = [restlet, jackson, json, lucene, restlet_test]
+json = 'org.json:org.json:jar:2.0'
+RESTLET = [restlet, jackson, json_ext, json, restlet_test]
 
 # PRINT CONFIGURATION
 print '---', "\n"
@@ -61,6 +61,7 @@ define 'BEL Framework REST API', :layout=>layout do
   project.version = '1.0'
   project.group = 'org.openbel.rest'
   compile.with RESTLET
+  run.using :main => 'org.openbel.rest.main'
   package :jar
   default_compile_opts compile
 end
