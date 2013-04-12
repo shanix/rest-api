@@ -36,7 +36,6 @@
  */
 package org.openbel.rest.common;
 
-import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
