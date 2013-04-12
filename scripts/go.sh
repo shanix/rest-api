@@ -49,6 +49,16 @@ function _4 {
     script "run.sh" || return $?
 }
 
+function _5 {
+    echo "Watching src/ for changes... "
+    echo
+    while true; do
+        DIRS=$(find src -type d -printf "%p ") || return $?
+        python3 "$_ENV_SCRIPTS"/gate ${DIRS} || return $?
+        script "build.sh"
+    done
+}
+
 # Each menu option should stand alone on its own
 # line and should be distinct from other entries.
 CHOICES=(
@@ -56,6 +66,7 @@ CHOICES=(
          "build" \
          "test" \
          "run" \
+         "build loop" \
          )
 
 if [ $# -gt 0 ]; then
