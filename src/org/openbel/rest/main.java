@@ -36,10 +36,13 @@
  */
 package org.openbel.rest;
 
+import org.openbel.framework.common.cfg.SystemConfiguration;
 import org.openbel.rest.common.RootResource;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import static java.lang.System.*;
 import static java.lang.Runtime.*;
@@ -49,6 +52,10 @@ import static java.lang.Integer.parseInt;
 
 class main extends Component {
     static int port;
+    static String cache;
+    static String work;
+    static String dburl;
+    static String residx;
     static APIApplication apiapp;
 
     public main() {
@@ -58,21 +65,57 @@ class main extends Component {
 
     public static void main(String... args) {
         String value = getenv("_ENV_PORT");
+        boolean configured = true;
         if (value == null) {
             err.println("no _ENV_PORT is set");
-            exit(1);
+            configured = false;
+        } else port = parseInt(value);
+        cache = getenv("_ENV_BEL_CACHE");
+        if (cache == null) {
+            err.println("no _ENV_BEL_CACHE is set");
+            configured = false;
         }
-        port = parseInt(value);
-        out.println("PORT is " + port);
+        work = getenv("_ENV_BEL_WORK");
+        if (work == null) {
+            err.println("no _ENV_BEL_WORK is set");
+            configured = false;
+        }
+        dburl = getenv("_ENV_BEL_DBURL");
+        if (dburl == null) {
+            err.println("no _ENV_BEL_DBURL is set");
+            configured = false;
+        }
+        residx = getenv("_ENV_BEL_RESIDX");
+        if (residx == null) {
+            err.println("no _ENV_BEL_RESIDX is set");
+            configured = false;
+        }
+        if (!configured) exit(1);
+        out.println("PORT: " + port);
+        out.println("CACHE: " + cache);
+        out.println("WORK: " + work);
+        out.println("DBURL: " + dburl);
+        out.println("RESOURCE INDEX: " + residx);
+        out.println();
         apiapp = new APIApplication();
-        main main = new main();
+        final main main = new main();
         try {
             main.start();
         } catch (Exception e) {
-            err.println(e);
             e.printStackTrace();
+            exit(1);
         }
+        Signal sigint = new Signal("INT");
+        Signal.handle(sigint, new SignalHandler() {
+            public void handle(Signal sig) {
+                try {
+                    main.stop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    exit(1);
+                }
+            }
+        });
     }
 
 }
-
