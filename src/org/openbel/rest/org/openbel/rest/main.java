@@ -57,7 +57,12 @@ class main extends Component {
     }
 
     public static void main(String... args) {
-        port = parseInt(getenv("_ENV_PORT"));
+        String value = getenv("_ENV_PORT");
+        if (value == null) {
+            err.println("no _ENV_PORT is set");
+            exit(1);
+        }
+        port = parseInt(value);
         out.println("PORT is " + port);
         apiapp = new APIApplication();
         main main = new main();
