@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <classpath>
+    <dir name="bin"/>
+  </classpath>
+</application>
+<!-- vim: set ts=2 sw=2 : -->
+
