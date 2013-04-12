@@ -42,7 +42,7 @@ jackson = restlet_grp + ':org.restlet.ext.jackson:jar:2.1.2'
 json_ext = restlet_grp + ':org.restlet.ext.json:jar:2.1.2'
 restlet_test = restlet_grp + ':org.restlet.test:jar:2.1.2'
 json = 'org.json:org.json:jar:2.0'
-RESTLET = [restlet, jackson, json_ext, json, restlet_test]
+RESTLET = [restlet, transitive(jackson), json_ext, json, restlet_test]
 
 # PRINT CONFIGURATION
 print '---', "\n"

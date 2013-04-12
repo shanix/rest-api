@@ -36,19 +36,28 @@
  */
 package org.openbel.rest.common;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
+import java.util.Map;
+
 public class RootResource extends ServerResource {
 
+    class Root {
+        private String foo;
+
+        Root() {
+            foo = "bar";
+        }
+        public String getFoo() {
+            return foo;
+        }
+    }
+
     @Get("json")
-    public JSONObject _get() throws JSONException {
-        JSONObject jo = new JSONObject();
-        jo.put("root", 42);
-        return jo;
+    public Root _get() {
+        return new Root();
     }
 
 }
