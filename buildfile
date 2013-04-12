@@ -55,10 +55,11 @@ define 'rest-api', :layout=>layout do
   project.version = '1.0'
   project.group = 'org.openbel.rest'
   compile.with deps
+  default_compile_opts compile
+
   main = 'org.openbel.rest.main'
   run.using :main => main
   package(:tgz).include _('.')
-  default_compile_opts compile
 
   task :deps => compile do
     deps_path = project.path_to('deps')

@@ -28,7 +28,7 @@ export _ENV_BEL_DBURL="${_ENV_BEL_DBURL:="$DEFAULT_DBURL"}"
 DEFAULT_RESIDX="http://resource.belframework.org/belframework/1.0/index.xml"
 export _ENV_BEL_RESIDX="${_ENV_BEL_RESIDX:="$DEFAULT_RESIDX"}"
 
-if [ -r "${CUSTOM_ENV_SH}" ]; then
-    source ${CUSTOM_ENV_SH} || exit 1
+if [ -r "${_ENV_OVERRIDE}" ]; then
+    source ${_ENV_OVERRIDE} || exit 1
 fi
 
