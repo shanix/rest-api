@@ -34,53 +34,29 @@
  * authors and licensors of the program for any liabilities that these
  * contractual assumptions directly impose on those licensors and authors.
  */
-package org.openbel.rest;
+package org.openbel.rest.common;
 
-import org.openbel.rest.common.*;
-import org.restlet.*;
-import org.restlet.routing.*;
+import org.restlet.resource.Get;
+import org.restlet.resource.ServerResource;
 
-/**
- * This application Restlet manages the BEL REST API resources and services.
- */
-public class APIApplication extends Application {
+import java.util.Map;
 
-    /**
-     * Creates our inbound root Restlet to receive incoming calls.
-     * @return {@link Restlet}
-     */
-    @Override
-    public Restlet createInboundRoot() {
-        System.out.println("Creating inbound root");
-        Router router = new Router(getContext());
+public class NamespaceValue extends ServerResource {
 
-        String path = "/api";
-        router.attach(path, APIRoot.class);
+    class Root {
+        private String root;
 
-        path = "/api/v1";
-        router.attach(path, V1Root.class);
-
-        path = "/api/v1/annotations";
-        router.attach(path, AnnotationsRoot.class);
-
-        path = "/api/v1/namespaces";
-        router.attach(path, NamespacesRoot.class);
-
-        path = "/api/v1/namespaces/{keyword}";
-        router.attach(path, Namespace.class);
-
-        path = "/api/v1/namespaces/{keyword}/{value}";
-        router.attach(path, NamespaceValue.class);
-
-        path = "/api/v1/lang";
-        router.attach(path, Lang.class);
-
-        path = "/api/v1/lang/relationships";
-        router.attach(path, Relationships.class);
-
-        path = "/api/v1/lang/functions";
-        router.attach(path, Functions.class);
-
-        return router;
+        Root() {
+            root = "namespace_value";
+        }
+        public String getRoot() {
+            return root;
+        }
     }
+
+    @Get("json")
+    public Root _get() {
+        return new Root();
+    }
+
 }

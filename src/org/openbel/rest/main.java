@@ -37,18 +37,16 @@
 package org.openbel.rest;
 
 import org.openbel.framework.common.cfg.SystemConfiguration;
-import org.openbel.rest.common.RootResource;
-import org.restlet.Component;
-import org.restlet.Context;
-import org.restlet.Server;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
+import org.restlet.*;
+import sun.misc.*;
+import java.util.*;
 
 import static java.lang.System.*;
 import static java.lang.Runtime.*;
-import static java.lang.Thread.sleep;
-import static org.restlet.data.Protocol.HTTP;
-import static java.lang.Integer.parseInt;
+import static java.lang.Thread.*;
+import static org.restlet.data.Protocol.*;
+import static java.lang.Integer.*;
+import static org.openbel.framework.common.cfg.SystemConfiguration.*;
 
 class main extends Component {
     static int port;
@@ -97,6 +95,17 @@ class main extends Component {
         out.println("DBURL: " + dburl);
         out.println("RESOURCE INDEX: " + residx);
         out.println();
+
+        out.print("Bootstrapping the framework... ");
+        // Bootstrap the framework
+        Map<String, String> map = new HashMap<>();
+        map.put(FRAMEWORK_CACHE_DIRECTORY_DESC, cache);
+        map.put(FRAMEWORK_WORKING_AREA_DESC, work);
+        map.put(KAMSTORE_URL_DESC, dburl);
+        map.put(RESOURCE_INDEX_URL_DESC, residx);
+        SystemConfiguration syscfg = createSystemConfiguration(map);
+        out.println("okay");
+
         apiapp = new APIApplication();
         final main main = new main();
         try {

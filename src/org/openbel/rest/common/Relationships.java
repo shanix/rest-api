@@ -41,16 +41,16 @@ import org.restlet.resource.ServerResource;
 
 import java.util.Map;
 
-public class RootResource extends ServerResource {
+public class Relationships extends ServerResource {
 
     class Root {
-        private String foo;
+        private String root;
 
         Root() {
-            foo = "bar";
+            root = "relationships";
         }
-        public String getFoo() {
-            return foo;
+        public String getRoot() {
+            return root;
         }
     }
 
