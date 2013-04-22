@@ -88,4 +88,3 @@ def configure(project)
     project.test.exclude '*IT'
   end
 end
-
